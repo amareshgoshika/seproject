@@ -47,21 +47,24 @@ if "logged_in" not in st.session_state:
 
 if st.session_state.logged_in:
     if st.session_state.user == "Admin":
-        from admin.pages import page1
-        selected_tab = st.sidebar.radio("Select Page", ["Welcome", "Page 1"])
+        from admin.pages import newFaculty
+        from admin.pages import newStudent
+        selected_tab = st.sidebar.radio("", ["Welcome", "New Faculty", "New Student"])
 
         if selected_tab == "Welcome":
             welcome()
-        elif selected_tab == "Page 1":
-            page1.page1()
+        elif selected_tab == "New Faculty":
+            newFaculty.newFaculty()
+        elif selected_tab == "New Student":
+            newStudent.newStudent()
     elif st.session_state.user == "Faculty":
-        from faculty.pages import page1
-        selected_tab = st.sidebar.radio("Select Page", ["Welcome", "Page 1"])
+        from faculty.pages import newFaculty
+        selected_tab = st.sidebar.radio("Select Page", ["Welcome", "New Faculty"])
 
         if selected_tab == "Welcome":
             welcome()
-        elif selected_tab == "Page 1":
-            page1.page1()
+        elif selected_tab == "New Faculty":
+            newFaculty.newFaculty()
     elif st.session_state.user == "Student":
         from student.pages import page1
         selected_tab = st.sidebar.radio("Select Page", ["Welcome", "Page 1"])
