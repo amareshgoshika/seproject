@@ -1,22 +1,23 @@
 import streamlit as st
-import os
-import sys
-
+from google.cloud import firestore
 from admin.welcome import welcome
-from faculty.faculty_dashboard import faculty_dashboard
 
-# Define the login page
+db = firestore.Client.from_service_account_json("firebaseJSON.json")
+
 def login_page():
     st.title("Welcome to A2S")
 
     user_type = st.radio("Select User Type", ["Admin", "Faculty", "Student"])
     username = st.text_input("Username:")
     password = st.text_input("Password:", type="password")
+    doc_ref = db.collection("loginTable").document(user_type)
+    doc = doc_ref.get()
+    data = doc.to_dict()
 
     if st.button("Login"):
         if user_type == "Admin":
             # Add logic for user login here
-            if username == "admin" and password == "password":
+            if username == data.get("username") and password == data.get("password"):
                 st.session_state.logged_in = True
                 st.session_state.user = "Admin"
                 st.experimental_rerun()
@@ -24,7 +25,7 @@ def login_page():
                 st.error("Incorrect username or password for Admin.")
         elif user_type == "Faculty":
             # Add logic for admin login here
-            if username == "faculty" and password == "password":
+            if username == data.get("username") and password == data.get("password"):
                 st.session_state.logged_in = True
                 st.session_state.user = "Faculty"
                 st.experimental_rerun()
@@ -32,7 +33,7 @@ def login_page():
                 st.error("Incorrect username or password for Faculty.")
         elif user_type == "Student":
             # Add logic for admin login here
-            if username == "student" and password == "password":
+            if username == data.get("username") and password == data.get("password"):
                 st.session_state.logged_in = True
                 st.session_state.user = "Student"
                 st.experimental_rerun()
@@ -49,7 +50,9 @@ if st.session_state.logged_in:
     if st.session_state.user == "Admin":
         from admin.pages import newFaculty
         from admin.pages import newStudent
-        selected_tab = st.sidebar.radio("", ["Welcome", "New Faculty", "New Student"])
+        from admin.pages import viewFaculty
+        from admin.pages import viewStudent
+        selected_tab = st.sidebar.radio("", ["Welcome", "New Faculty", "New Student", "View Faculty", "View Student"])
 
         if selected_tab == "Welcome":
             welcome()
@@ -57,8 +60,13 @@ if st.session_state.logged_in:
             newFaculty.newFaculty()
         elif selected_tab == "New Student":
             newStudent.newStudent()
+        elif selected_tab == "View Faculty":
+            viewFaculty.viewFaculty()
+        elif selected_tab == "View Student":
+            viewStudent.viewStudent()
+
     elif st.session_state.user == "Faculty":
-        from faculty.pages import newFaculty
+        from admin.pages import newFaculty
         selected_tab = st.sidebar.radio("Select Page", ["Welcome", "New Faculty"])
 
         if selected_tab == "Welcome":
