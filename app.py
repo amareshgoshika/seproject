@@ -6,6 +6,7 @@ db = firestore.Client.from_service_account_json("firebaseJSON.json")
 
 def login_page():
     st.title("Welcome to A2S")
+    st.write("Login to get acess to A2S")
 
     user_type = st.radio("Select User Type", ["Admin", "Faculty", "Student"])
     username = st.text_input("Username:")
@@ -79,11 +80,11 @@ if st.session_state.logged_in:
 
     elif st.session_state.user == "Student":
         from student.pages import page1
-        selected_tab = st.sidebar.radio("Select Page", ["Welcome", "Page 1"])
+        selected_tab = st.sidebar.radio("Select Page", ["Welcome", "Courses", "Attendance"])
 
         if selected_tab == "Welcome":
             welcome()
-        elif selected_tab == "Page 1":
+        elif selected_tab == "Attendance":
             page1.page1()
 else:
     login_page()
