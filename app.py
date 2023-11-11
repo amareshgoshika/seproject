@@ -54,7 +54,8 @@ if st.session_state.logged_in:
         from admin.pages import viewFaculty
         from admin.pages import viewStudent
         from admin.pages import courses
-        selected_tab = st.sidebar.radio("", ["Welcome", "New Faculty", "New Student", "View Faculty", "View Student", "Courses"])
+        from admin.pages import addCourse
+        selected_tab = st.sidebar.radio("", ["Welcome", "New Faculty", "New Student", "View Faculty", "View Student", "Courses", "Add Course"])
 
         if selected_tab == "Welcome":
             welcome()
@@ -68,6 +69,8 @@ if st.session_state.logged_in:
             viewStudent.viewStudent()
         elif selected_tab == "Courses":
             courses.courses()
+        elif selected_tab == "Add Course":
+            addCourse.addCourse()
 
     elif st.session_state.user == "Faculty":
         from admin.pages import newFaculty
